@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="top">
+        <header class="d-flex align-items-center justify-content-center justify-content-lg-start">
+            <div class="container d-flex flex-direction-row align-items-center justify-content-center">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="{{ url_for('static', filename='/assets/logo.png') }}"
+                         style="height: 10vh; width: 10vh; border-radius: 50%;" class="bi me-2" width="40" height="32"
+                         role="img" aria-label="Bootstrap">
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{{ url_for('about') }}" class="nav-link px-2 text-white">О нас</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+                </ul>
+
+                <div class="text-end">
+                    {% if not logged_in: %}
+                    <a href="{{ url_for('register') }}">
+                        <button type="button" class="btn btn-outline-light me-2">Регистрация</button>
+                    </a>
+                    <a href="{{ url_for('login') }}">
+                        <button type="button" class="btn btn-warning">Войти</button>
+                    </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('logout') }}">
+                    <button type="button" class="btn btn-outline-light me-2">Выйти</button>
+                </a>
+                <a href="{{ url_for('me') }}">
+                    <button type="button" class="btn btn-warning">Личный кабинет</button>
+                </a>
+
+                <a href="{{ url_for('cart') }}">
+                    <button type="button" class="btn btn-warning">Cart</button>
+                </a>
+            {% endif %}
+            </div>
+        </header>
+
+
+        <div class="text-center" id="hero">
+            <h1 class="fw-bold py-2">TEEXPRINT</h1>
+            <div class="col-lg-6 mx-auto">
+              <p class="lead fw-light pb-4 mt-5">Воплощайте свой дизайн</p>
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3 my-5" onClick="document.getElementById('link').scrollIntoView();" >Наши Товары</button>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <div  id="custom-cards">
+
+        <section class="featured-products pt-5" id="link">
+            <div class="container mt-5">
+                <h2 class="pb-5">Заказывай сейчас!</h2>
+                <div class="product">
+                    <a href="{{ url_for('about') }}" class="nav-link px-2 text-white"><img src="{{ url_for('static', filename='/assets/products/vader.jpeg') }}" alt="Футболка"></a>
+                    <h3>Vader</h3>
+                    <p>$10</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка Vader', 10);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/mand.jpeg') }}" alt="Product 2">
+                    <h3>Mandalorian</h3>
+                    <p>$11</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" name="mand" onclick="addToCart('Футболка Mandalorian', 11);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/tom.jpeg') }}" alt="Product 3">
+                    <h3>Tom</h3>
+                    <p>$9</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка Tom', 9);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/travis.jpeg') }}" alt="Product 3">
+                    <h3>Travis</h3>
+                    <p>$11</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка Travis', 11);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/tupac.jpeg') }}" alt="Product 3">
+                    <h3>2PAC</h3>
+                    <p>$12</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка 2PAC', 12);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/elon.jpeg') }}" alt="Product 3">
+                    <h3>Elon</h3>
+                    <p>$10</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка Elon', 10);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/vice.jpeg') }}" alt="Product 3">
+                    <h3>GTA</h3>
+                    <p>$8</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка GTA', 8);">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="{{ url_for('static', filename='/assets/products/week.jpeg') }}" alt="Product 3">
+                    <h3>Weeknd</h3>
+                    <p>$9</p>
+                    <button type="button" class="add-to-cart btn btn-outline-light me-2" onclick="addToCart('Футболка Weeknd', 9);">Add to Cart</button>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+
+
+    <div class="py-5 text-center" id="slidersection">
+
+      <div class="container rounded-5 my-5">
+        <h2 class="">Наши партнеры</h2>
+        <section class="customer-logos slider pt-5">
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/1.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/2.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/3.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/4.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/7.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/5.png') }}"></div>
+            <div class="slide"><img src="{{ url_for('static', filename='/assets/partners/6.png') }}"></div>
+        </section>
+      </div>
+    </div>
+
+
+    <div id="secondjumbo">
+      <div class="container px-4 py-5" id="featured-3">
+        <h2 class=" border-bottom">Наши услуги</h2>
+
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+          <div class="feature col" id="column">
+              <img src= "{{ url_for('static', filename='/assets/icons/shipping.png') }}" alt="">
+            <h2 class="fs-2">Доставка до двери</h2>
+            <p>Мы доставим ваш заказ прямо к вам в дом!</p>
+          </div>
+
+          <div class="feature col" id="column">
+              <img src= "{{ url_for('static', filename='/assets/icons/design.png') }}" alt="">
+            <h2 class="fs-2">Кастомный дизайн</h2>
+            <p>Вы можете создать свой дизайн принта!</p>
+          </div>
+
+          <div class="feature col" id="column">
+              <img src= "{{ url_for('static', filename='/assets/icons/carpet.png') }}" alt="">
+            <h2 class="fs-2">Печать на коврах</h2>
+            <p>Мы также можем преобразить ваш ковер!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="d-flex align-items-center justify-content-center justify-content-lg-start">
+            <div class="container d-flex flex-direction-row align-items-center justify-content-center">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="{{ url_for('static', filename='/assets/logo.png') }}"
+                         style="height: 10vh; width: 10vh; border-radius: 50%;" class="bi me-2" width="40" height="32"
+                         role="img" aria-label="Bootstrap"></img>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{{ url_for('about') }}" class="nav-link px-2 text-white">О нас</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+                </ul>
+
+                <div class="text-end">
+                    {% if not logged_in: %}
+                    <a href="{{ url_for('register') }}">
+                        <button type="button" class="btn btn-outline-light me-2">Регистрация</button>
+                    </a>
+                    <a href="{{ url_for('login') }}">
+                        <button type="button" class="btn btn-warning">Войти</button>
+                    </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('logout') }}">
+                    <button type="button" class="btn btn-outline-light me-2">Выйти</button>
+                </a>
+                <a href="{{ url_for('me') }}">
+                    <button type="button" class="btn btn-warning">Личный кабинет</button>
+                </a>
+            {% endif %}
+            </div>
+        </header>
+
+        <div class="container my-5">
+          <div class="position-relative p-5 text-center text-muted bg-#191919 border border-dashed rounded-5 shadow">
+            <svg class="bi mt-5 mb-3" width="48" height="48"><use xlink:href="#check2-circle"></use></svg>
+            <h1 class="text-white pb-5">Ваш заказ принят!</h1>
+            <p class="col-lg-6 mx-auto mb-5">
+              Мы приступим к нему в ближайшее время и займемся доставкой!
+            </p>
+          </div>
+        </div>
+
+{% endblock %}

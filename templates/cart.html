@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+    <header class="d-flex align-items-center justify-content-center justify-content-lg-start">
+        <div class="container d-flex flex-direction-row align-items-center justify-content-center">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img src="{{ url_for('static', filename='/assets/logo.png') }}"
+                     style="height: 10vh; width: 10vh; border-radius: 50%;" class="bi me-2" width="40" height="32"
+                     role="img" aria-label="Bootstrap"></img>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{{ url_for('about') }}" class="nav-link px-2 text-white">О нас</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+            </ul>
+
+            <div class="text-end">
+                {% if not logged_in: %}
+                <a href="{{ url_for('register') }}">
+                    <button type="button" class="btn btn-outline-light me-2">Регистрация</button>
+                </a>
+                <a href="{{ url_for('login') }}">
+                    <button type="button" class="btn btn-warning">Войти</button>
+                </a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('logout') }}">
+                <button type="button" class="btn btn-outline-light me-2">Выйти</button>
+            </a>
+            <a href="{{ url_for('me') }}">
+                <button type="button" class="btn btn-warning">Личный кабинет</button>
+            </a>
+
+            <a href="{{ url_for('cart') }}">
+                    <button type="button" class="btn btn-warning">Cart</button>
+            </a>
+        {% endif %}
+        </div>
+    </header>
+
+    <div class="container py-5">
+        <section class="cart-items py-5">
+            <h2 class="cartelement size-5">Корзина</h2>
+            <div class="container featured-products py-5" name="product" id="cart-items-list"></div>
+            <p name="price" id="ttl-price"></p>
+            <div type="hidden" id="total-price" class="pricetag"></div>
+            <button class="btn btn-warning" id="clear-cart-btn" onclick="saveData()">Clear Cart</button>
+            <a href="{{ url_for('buy') }}"><button method="post" class="btn btn-warning ml-2" id="enter-cart-btn">Подтвердить</button></a>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve the cart items from local storage
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+            // Get the cart items list element
+            let cartItemsList = document.getElementById('cart-items-list');
+
+            // Get the total price element
+            let totalPriceElement = document.getElementById('total-price');
+
+            // Get the clear cart button element
+            let clearCartBtn = document.getElementById('clear-cart-btn');
+
+            // Calculate the total price
+            let totalPrice = 0;
+            let cartproducts = []
+
+            for (let i = 0; i < cartItems.length; i++) {
+                cartproducts += cartItems[i].product + ", "
+                let item = cartItems[i];
+                let price = parseInt(item.price); // Convert price to an integer
+
+                // Create a new cart item element
+                let cartItemElement = document.createElement('div');
+                cartItemElement.innerHTML = `
+                    <div class="cartproduct">
+                        <h3 class="cartelement">${item.product}</h3>
+                        <p>Цена: $${price}</p>
+                    </div>
+                `;
+
+                // Add the cart item element to the cart items list
+                cartItemsList.appendChild(cartItemElement);
+
+                // Add the item price to the total price
+                totalPrice += price;
+            }
+
+            // Display the total price
+            totalPriceElement.textContent = `Итог: $${totalPrice}`;
+            document.getElementById('ttl-price').textContent = `Итог: $${totalPrice}`;
+
+            // Add click event listener to clear cart button
+            clearCartBtn.addEventListener('click', function() {
+                // Clear the cart items from local storage
+                localStorage.removeItem('cartItems');
+
+                // Clear the displayed cart items
+                cartItemsList.innerHTML = '';
+                totalPriceElement.textContent = 'Cart is empty.';
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/update_total_price", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log("Total price sent to server successfully");
+              }
+            };
+
+            var data = { totalPrice: totalPrice,
+                         cartItems: cartproducts };
+            console.log(cartproducts);
+
+            xhr.send(JSON.stringify(data));
+        });
+
+
+
+    </script>
+
+{% endblock %}
